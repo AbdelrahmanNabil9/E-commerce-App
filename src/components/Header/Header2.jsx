@@ -21,7 +21,7 @@ import { useState } from "react";
 
 const Header2 = () => {
   const [anchorEl, setAnchorEl] = useState(null);
-  const [selectedIndex, setSelectedIndex] = useState(1);
+  const [selectedIndex, setSelectedIndex] = useState(0);
   const open = Boolean(anchorEl);
   const handleClickListItem = (event) => {
     setAnchorEl(event.currentTarget);
@@ -43,7 +43,7 @@ const Header2 = () => {
     borderRadius: theme.shape.borderRadius,
     border: "1px solid #777",
     "&:hover": {
-      backgroundColor: alpha(theme.palette.common.white, 0.25),
+      border: "1px solid #333",
     },
     marginRight: theme.spacing(2),
     marginLeft: 0,

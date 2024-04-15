@@ -5,11 +5,14 @@ import {
 	IconButton,
 	ListItemIcon,
 	ListItemText,
+	Stack,
 	Typography,
+	useMediaQuery,
 	useTheme,
 } from "@mui/material";
 import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
+
 import MenuItem from "@mui/material/MenuItem";
 import { useState } from "react";
 import WindowIcon from "@mui/icons-material/Window";
@@ -28,6 +31,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
+import Links from "./Links";
 
 const Header3 = () => {
 	const [anchorEl, setAnchorEl] = useState(null);
@@ -63,6 +67,7 @@ const Header3 = () => {
 				display: "flex",
 				alignItems: "center",
 				justifyContent: "space-between",
+				mt: 5,
 			}}
 		>
 			<Box>
@@ -129,9 +134,24 @@ const Header3 = () => {
 					</MenuItem>
 				</Menu>
 			</Box>
-			<IconButton onClick={toggleDrawer("top", true)}>
-				<MenuIcon />
-			</IconButton>
+
+			{useMediaQuery("(min-width:1200px)") && (
+				<Stack gap={3} direction={"row"} alignItems={"center"}>
+					<Links title={"home"} />
+					<Links title={"Mega Menu"} />
+					<Links title={"Full Screen Menu"} />
+					<Links title={"Pages"} />
+					<Links title={"User Acoount"} />
+					<Links title={"Vendor Account"} />
+				</Stack>
+			)}
+
+			{useMediaQuery("(max-width:1200px)") && (
+				<IconButton onClick={toggleDrawer("top", true)}>
+					<MenuIcon />
+				</IconButton>
+			)}
+
 			<Drawer
 				anchor={"top"}
 				open={state["top"]}

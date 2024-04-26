@@ -47,10 +47,10 @@ const Header2 = () => {
     },
     marginRight: theme.spacing(2),
     marginLeft: 0,
-    minWidth: "300px",
+    width: "250px",
     [theme.breakpoints.up("sm")]: {
       marginLeft: theme.spacing(3),
-      width: "auto",
+      width: "330px",
     },
   }));
 

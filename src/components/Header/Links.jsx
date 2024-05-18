@@ -9,7 +9,8 @@ import {
 	Typography,
 } from "@mui/material";
 
-const Links = ({title}) => {
+// eslint-disable-next-line react/prop-types
+const Links = ({ title }) => {
 	return (
 		<Box
 			sx={{
@@ -30,6 +31,7 @@ const Links = ({title}) => {
 					left: "50%",
 					transform: "translateX(-50%)",
 					display: "none",
+					zIndex: 20,
 				}}
 			>
 				<Paper sx={{ mt: 2 }}>
@@ -48,9 +50,10 @@ const Links = ({title}) => {
 									/>
 								</ListItemButton>
 							</ListItem>
-							<ListItem disablePadding
-              sx={{ ":hover .subLink": {display: "block"}}}
-              >
+							<ListItem
+								disablePadding
+								sx={{ ":hover .subLink": { display: "block" } }}
+							>
 								<ListItemButton>
 									<ListItemText
 										sx={{
@@ -65,10 +68,15 @@ const Links = ({title}) => {
 									<KeyboardArrowRightOutlined fontSize="small" />
 								</ListItemButton>
 								<Box
-                className="subLink"
-                sx={{display: "none", position: "absolute", top: 0, left: "100%"}}
-                >
-									<Paper sx={{ ml:1, minWidth: 150}}>
+									className="subLink"
+									sx={{
+										display: "none",
+										position: "absolute",
+										top: 0,
+										left: "100%",
+									}}
+								>
+									<Paper sx={{ ml: 1, minWidth: 150 }}>
 										<nav aria-label="secondary mailbox folders">
 											<List>
 												<ListItem disablePadding>

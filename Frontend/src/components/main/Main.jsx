@@ -20,6 +20,7 @@ import { useState } from "react";
 import "./Main.css";
 import { Close } from "@mui/icons-material";
 import ProductDetails from "./ProductDetails";
+import { useGetProductByNameQuery } from "../../redux/product";
 
 const Main = () => {
 	const [alignment, setAlignment] = useState("left");
@@ -39,136 +40,139 @@ const Main = () => {
 	};
 
 	const theme = useTheme();
-	return (
-		<Container sx={{ py: 9 }}>
-			<Stack
-				direction={"row"}
-				alignItems={"center"}
-				justifyContent={"space-between"}
-				flexWrap={"wrap"}
-				gap={3}
-			>
-				<Box>
-					<Typography variant="h6"> Selected Products</Typography>
-					<Typography variant="body1" fontWeight={300}>
-						All our New Arrivals in an exclusive Brand Collection
-					</Typography>
-				</Box>
+	const { data, error, isLoading } = useGetProductByNameQuery('products?populate=*')
 
-				<ToggleButtonGroup
-					value={alignment}
-					exclusive
-					onChange={handleAlignment}
-					aria-label="text alignment"
-					color="error"
+	if (data) {
+		return (
+			<Container sx={{ py: 9 }}>
+				<Stack
+					direction={"row"}
+					alignItems={"center"}
+					justifyContent={"space-between"}
+					flexWrap={"wrap"}
+					gap={3}
 				>
-					<ToggleButton
-						className="toggle-button"
-						value="left"
-						aria-label="left aligned"
-						sx={{ color: theme.palette.text.primary }}
+					<Box>
+						<Typography variant="h6"> Selected Products</Typography>
+						<Typography variant="body1" fontWeight={300}>
+							All our New Arrivals in an exclusive Brand Collection
+						</Typography>
+					</Box>
+	
+					<ToggleButtonGroup
+						value={alignment}
+						exclusive
+						onChange={handleAlignment}
+						aria-label="text alignment"
+						color="error"
 					>
-						All Products
-					</ToggleButton>
-					<ToggleButton
-						className="toggle-button"
-						value="center"
-						aria-label="centered"
-						sx={{ mx: "16px !important", color: theme.palette.text.primary }}
-					>
-						Men Category
-					</ToggleButton>
-					<ToggleButton
-						className="toggle-button"
-						value="right"
-						aria-label="right aligned"
-						sx={{ color: theme.palette.text.primary }}
-					>
-						Women Category
-					</ToggleButton>
-				</ToggleButtonGroup>
-			</Stack>
-
-			<Stack
-				direction={"row"}
-				flexWrap={"wrap"}
-				justifyContent={"space-between"}
-			>
-				{["Aaa", "bbb", "ccc"].map(() => {
-					return (
-						<Card
-							sx={{
-								maxWidth: 333,
-								mt: 6,
-								":hover .MuiCardMedia-root": {
-									rotate: "1deg",
-									scale: "1.1",
-									transition: "0.3s",
-								},
-							}}
+						<ToggleButton
+							className="toggle-button"
+							value="left"
+							aria-label="left aligned"
+							sx={{ color: theme.palette.text.primary }}
 						>
-							<CardMedia
-								sx={{ height: 275 }}
-								image="https://mui.com/static/images/cards/contemplative-reptile.jpg"
-								title="green iguana"
-							/>
-							<CardContent>
-								<Stack
-									direction={"row"}
-									justifyContent={"space-between"}
-									alignItems={"center"}
-								>
-									<Typography gutterBottom variant="h6" component="div">
-										T-shirt
-									</Typography>
-									<Typography variant="subtitle1" component="p">
-										$12.99
-									</Typography>
-								</Stack>
-								<Typography variant="body2" color="text.secondary">
-									Lizards are a widespread group of squamate reptiles, with over
-									6,000 species, ranging across all continents except Antarctica
-								</Typography>
-							</CardContent>
-							<CardActions sx={{ justifyContent: "space-between" }}>
-								<Button
-									onClick={handleClickOpen}
-									sx={{ textTransform: "capitalize" }}
-									size="small"
-								>
-									<AddShoppingCartOutlinedIcon
-										sx={{ mr: 1 }}
-										fontSize="small"
-									/>
-									add to cart
-								</Button>
-								<Rating precision={0.1} name="read-only" value={4.5} readOnly />
-							</CardActions>
-						</Card>
-					);
-				})}
-			</Stack>
-
-			<Dialog
-				onClose={handleClose}
-				open={open}
-				sx={{ " .MuiPaper-root": { minWidth: { xs: "100%", md: 800 } } }}
-			>
-				<IconButton
-					sx={{
-						":hover": { color: "red", rotate: "180deg", transition: "0.3s" },
-						position: "absolute",
-						top: 0,
-						right: 10,
-					}}
-					onClick={handleClose}
+							All Products
+						</ToggleButton>
+						<ToggleButton
+							className="toggle-button"
+							value="center"
+							aria-label="centered"
+							sx={{ mx: "16px !important", color: theme.palette.text.primary }}
+						>
+							Men Category
+						</ToggleButton>
+						<ToggleButton
+							className="toggle-button"
+							value="right"
+							aria-label="right aligned"
+							sx={{ color: theme.palette.text.primary }}
+						>
+							Women Category
+						</ToggleButton>
+					</ToggleButtonGroup>
+				</Stack>
+	
+				<Stack
+					direction={"row"}
+					flexWrap={"wrap"}
+					justifyContent={"space-between"}
 				>
-					<Close />
-				</IconButton>
-
-        <ProductDetails/>
-			</Dialog>
-		</Container>
-	);
+					{data.data.map((item) => {
+						return (
+							<Card
+								sx={{
+									maxWidth: 333,
+									mt: 6,
+									":hover .MuiCardMedia-root": {
+										rotate: "1deg",
+										scale: "1.1",
+										transition: "0.3s",
+									},
+								}}
+							>
+								<CardMedia
+									sx={{ height: 275 }}
+									image={`http://localhost:1337${item.attributes.productImg.data[0].attributes.url}`}
+									title="green iguana"
+								/>
+								<CardContent>
+									<Stack
+										direction={"row"}
+										justifyContent={"space-between"}
+										alignItems={"center"}
+									>
+										<Typography gutterBottom variant="h6" component="div">
+											{item.attributes.productTitle}
+										</Typography>
+										<Typography variant="subtitle1" component="p">
+										${item.attributes.productPrice}
+										</Typography>
+									</Stack>
+									<Typography variant="body2" color="text.secondary">
+									{item.attributes.productDescription}
+									</Typography>
+								</CardContent>
+								<CardActions sx={{ justifyContent: "space-between" }}>
+									<Button
+										onClick={handleClickOpen}
+										sx={{ textTransform: "capitalize" }}
+										size="small"
+									>
+										<AddShoppingCartOutlinedIcon
+											sx={{ mr: 1 }}
+											fontSize="small"
+										/>
+										add to cart
+									</Button>
+									<Rating precision={0.1} name="read-only" value={item.attributes.productRating} readOnly />
+								</CardActions>
+							</Card>
+						);
+					})}
+				</Stack>
+	
+				<Dialog
+					onClose={handleClose}
+					open={open}
+					sx={{ " .MuiPaper-root": { minWidth: { xs: "100%", md: 800 } } }}
+				>
+					<IconButton
+						sx={{
+							":hover": { color: "red", rotate: "180deg", transition: "0.3s" },
+							position: "absolute",
+							top: 0,
+							right: 10,
+						}}
+						onClick={handleClose}
+					>
+						<Close />
+					</IconButton>
+	
+					<ProductDetails/>
+				</Dialog>
+			</Container>
+		);
+	}
 };
 export default Main;
